@@ -5,7 +5,11 @@ type Props<ListItem> = {
 
 const CommonList = <ListItem extends any>(props: Props<ListItem>) => {
   const { data, renderItem } = props;
-  return <ul>{data.map(renderItem)}</ul>;
+  return (
+    <ul className="p-0" style={{ listStyleType: 'none' }}>
+      {data.map(renderItem)}
+    </ul>
+  );
 };
 
 export default CommonList;
