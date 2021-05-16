@@ -4,6 +4,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../../../../store';
+import { isAuthorizedSelector } from '../../../../auth/store/index/selectors';
 import ErrorMessage from '../../../../common/ui/components/error-message';
 import Loader from '../../../../common/ui/components/loader';
 import notify from '../../../../common/ui/components/notify';
@@ -23,6 +24,7 @@ const TasksForm = (props: Props) => {
   const { task } = props;
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector(isLoadingSelector);
+  const isAuthorized = useSelector(isAuthorizedSelector);
   const {
     register,
     handleSubmit,
@@ -54,9 +56,10 @@ const TasksForm = (props: Props) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <input type="hidden" {...register('id')} />
+      {task?.id && isAuthorized && <Form.Check type="switch" id="status" label="Status" {...register('status')} />}
       <Form.Group controlId="username">
         <Form.Label>Username</Form.Label>
-        <Form.Control isInvalid={!!errors.username} disabled={!!task} {...register('username', { required: true })} />
+        <Form.Control isInvalid={!!errors.username} readOnly={!!task} {...register('username', { required: true })} />
         <ErrorMessage error={errors.username} />
       </Form.Group>
       <Form.Group controlId="email">
@@ -64,7 +67,7 @@ const TasksForm = (props: Props) => {
         <Form.Control
           type="email"
           placeholder="name@example.com"
-          disabled={!!task}
+          readOnly={!!task}
           isInvalid={!!errors.email}
           {...register('email', { required: true, pattern: { value: emailPattern, message: 'Неверный email' } })}
         />
