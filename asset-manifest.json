@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/beejee/static/js/main.ffcb9191.chunk.js",
-    "main.js.map": "/beejee/static/js/main.ffcb9191.chunk.js.map",
+    "main.js": "/beejee/static/js/main.e95b7eed.chunk.js",
+    "main.js.map": "/beejee/static/js/main.e95b7eed.chunk.js.map",
     "runtime-main.js": "/beejee/static/js/runtime-main.3ecc004b.js",
     "runtime-main.js.map": "/beejee/static/js/runtime-main.3ecc004b.js.map",
     "static/css/2.4c97ca4f.chunk.css": "/beejee/static/css/2.4c97ca4f.chunk.css",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.3ecc004b.js",
     "static/css/2.4c97ca4f.chunk.css",
     "static/js/2.9e1728d3.chunk.js",
-    "static/js/main.ffcb9191.chunk.js"
+    "static/js/main.e95b7eed.chunk.js"
   ]
 }
