@@ -3,7 +3,7 @@ import { BaseResource, RequestOptions } from './interfaces/BaseResource';
 
 export class EntityRepository<Entity> implements BaseRepository<Entity> {
   constructor(
-    private resource: BaseResource<Entity>,
+    protected resource: BaseResource<Entity>,
     private endpoint: string,
     private defaultOptions?: RequestOptions
   ) {}

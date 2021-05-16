@@ -81,7 +81,9 @@ const TasksPagesIndex = () => {
         <Col>
           <CommonList
             data={tasks}
-            renderItem={(task) => <TaskCardComponent task={task} onEdit={isAuthorized ? onEditClick : undefined} />}
+            renderItem={(task) => (
+              <TaskCardComponent key={task.id} task={task} onEdit={isAuthorized ? onEditClick : undefined} />
+            )}
           ></CommonList>
           <CommonPagination total={tasksCount} active={tasksPage} onChange={onPageChange} />
         </Col>

@@ -1,5 +1,6 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { batch } from 'react-redux';
+import { authTokenSelector } from '../../../auth/store/index/selectors';
 import { SortParams } from '../../domain/interfaces/sortParams';
 import { Task } from '../../domain/interfaces/task';
 import tasksRepository from '../../domain/repositories/tasksRepository';
@@ -18,17 +19,22 @@ type LoadTasksOptions =
 export const setPage = createAction<number>(`${PREFIX}/setPage`);
 export const setSortParams = createAction<SortParams>(`${PREFIX}/setSortParams`);
 
-export const createTask = createAsyncThunk<Task, FormData>(`${PREFIX}/createTask`, async (task, { dispatch }) => {
-  const createdTask = await tasksRepository.create(task);
-  dispatch(loadTasks());
-  return createdTask;
-});
+export const saveTask = createAsyncThunk<Task, FormData>(
+  `${PREFIX}/saveTask`,
+  async (task, { dispatch, getState, rejectWithValue }) => {
+    const token = authTokenSelector(getState());
+    task.append('token', token);
 
-export const updateTask = createAsyncThunk<Task, FormData>(`${PREFIX}/updateTask`, async (task, { dispatch }) => {
-  const createdTask = await tasksRepository.update(task as unknown as any);
-  dispatch(loadTasks());
-  return createdTask;
-});
+    let updatedTask;
+    try {
+      updatedTask = await tasksRepository[task.get('id') ? 'updateByPost' : 'create'](task);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+    await dispatch(loadTasks());
+    return updatedTask;
+  }
+);
 
 export const loadTasks = createAsyncThunk<TasksListResponse, LoadTasksOptions>(
   `${PREFIX}/loadTasks`,
