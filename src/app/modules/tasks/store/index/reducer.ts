@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Task } from '../../domain/interfaces/task';
-import { loadTasks } from './actions';
+import { createTask, loadTasks } from './actions';
 
 const tasksIndexStore = createSlice({
   name: 'tasks-index',
@@ -15,6 +15,16 @@ const tasksIndexStore = createSlice({
       state.loading = false;
     });
     builder.addCase(loadTasks.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(createTask.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createTask.fulfilled, (state, { payload }) => {
+      state.tasks.push(payload);
+      state.loading = false;
+    });
+    builder.addCase(createTask.rejected, (state) => {
       state.loading = false;
     });
   },
