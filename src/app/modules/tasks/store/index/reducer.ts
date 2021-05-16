@@ -38,7 +38,7 @@ const tasksIndexStore = createSlice({
     });
     builder.addCase(createTask.fulfilled, (state, { payload }) => {
       tasksAdapter.addOne(state, payload);
-      state.tasksCount += 1;
+      state.tasksCount++;
       state.loading = false;
     });
     builder.addCase(createTask.rejected, (state) => {

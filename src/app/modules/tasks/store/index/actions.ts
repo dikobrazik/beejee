@@ -18,9 +18,11 @@ type LoadTasksOptions =
 export const setPage = createAction<number>(`${PREFIX}/setPage`);
 export const setSortParams = createAction<SortParams>(`${PREFIX}/setSortParams`);
 
-export const createTask = createAsyncThunk<Task, FormData>(`${PREFIX}/createTask`, (task) =>
-  tasksRepository.create(task)
-);
+export const createTask = createAsyncThunk<Task, FormData>(`${PREFIX}/createTask`, async (task, { dispatch }) => {
+  const createdTask = await tasksRepository.create(task);
+  dispatch(loadTasks());
+  return createdTask;
+});
 
 export const loadTasks = createAsyncThunk<TasksListResponse, LoadTasksOptions>(
   `${PREFIX}/loadTasks`,
