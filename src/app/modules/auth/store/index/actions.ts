@@ -1,7 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import fetchResource from '../../../core/fetchResource';
 
-const AUTH_TOKEN = `@auth-token`;
+export const AUTH_TOKEN = `@auth-token`;
 
 const PREFIX = 'auth';
 

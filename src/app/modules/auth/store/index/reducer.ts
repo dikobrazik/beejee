@@ -7,7 +7,14 @@ const authSlice = createSlice({
     loading: false,
     token: '',
   },
-  reducers: {},
+  reducers: {
+    setToken: (state, { payload }) => {
+      state.token = payload;
+    },
+    clearToken: (state) => {
+      state.token = '';
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(initializeAuthentication, (state, { payload }) => {
       state.token = payload;
@@ -30,5 +37,7 @@ const authSlice = createSlice({
 
 const authStore = authSlice.reducer;
 type authStore = ReturnType<typeof authSlice.reducer>;
+
+export const { setToken, clearToken } = authSlice.actions;
 
 export default authStore;
