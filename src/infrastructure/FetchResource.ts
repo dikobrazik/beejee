@@ -7,11 +7,15 @@ export class FetchResource<Entity> implements BaseResource<Entity> {
 
   public post<ResponsePayload = Entity>(
     endpoint: string,
-    body?: Entity,
+    body?: FormData,
     options?: RequestOptions
   ): Promise<ResponsePayload> {
     const requestUrl = this.getRequestPath(endpoint, options?.queryParams);
-    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body) });
+    const requestOptions = this.getRequestOptions({
+      ...options,
+      body,
+      method: 'POST',
+    });
     return this.makeRequest<ResponsePayload>(requestUrl, requestOptions);
   }
   public get<ResponsePayload = Entity>(
@@ -20,7 +24,7 @@ export class FetchResource<Entity> implements BaseResource<Entity> {
     options?: RequestOptions
   ): Promise<ResponsePayload> {
     const requestUrl = this.getRequestPath(endpoint, params);
-    const requestOptions = this.getRequestOptions(options);
+    const requestOptions = this.getRequestOptions({ ...options, method: 'GET' });
     return this.makeRequest<ResponsePayload>(requestUrl, requestOptions);
   }
   public put<ResponsePayload = Entity>(
@@ -29,7 +33,7 @@ export class FetchResource<Entity> implements BaseResource<Entity> {
     options?: RequestOptions
   ): Promise<ResponsePayload> {
     const requestUrl = this.getRequestPath(endpoint, options?.queryParams);
-    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body) });
+    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body), method: 'PUT' });
     return this.makeRequest<ResponsePayload>(requestUrl, requestOptions);
   }
   public patch<ResponsePayload = Entity>(
@@ -38,7 +42,7 @@ export class FetchResource<Entity> implements BaseResource<Entity> {
     options?: RequestOptions
   ): Promise<ResponsePayload> {
     const requestUrl = this.getRequestPath(endpoint, options?.queryParams);
-    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body) });
+    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body), method: 'PATCH' });
     return this.makeRequest<ResponsePayload>(requestUrl, requestOptions);
   }
   public delete<ResponsePayload = Entity>(
@@ -47,7 +51,7 @@ export class FetchResource<Entity> implements BaseResource<Entity> {
     options?: RequestOptions
   ): Promise<ResponsePayload> {
     const requestUrl = this.getRequestPath(endpoint, options?.queryParams);
-    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body) });
+    const requestOptions = this.getRequestOptions({ ...options, body: JSON.stringify(body), method: 'DELETE' });
     return this.makeRequest<ResponsePayload>(requestUrl, requestOptions);
   }
 

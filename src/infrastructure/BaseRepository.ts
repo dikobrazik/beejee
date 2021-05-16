@@ -8,8 +8,8 @@ export class EntityRepository<Entity> implements BaseRepository<Entity> {
     private defaultOptions?: RequestOptions
   ) {}
 
-  public create<RequestResponse = Entity>(entity: Entity, options?: RequestOptions): Promise<RequestResponse> {
-    return this.resource.post(this.endpoint, entity, options);
+  public create<RequestResponse = Entity>(formData: FormData, options?: RequestOptions): Promise<RequestResponse> {
+    return this.resource.post(`${this.endpoint}/create`, formData, options);
   }
   public load<RequestResponse = Entity>(
     params?: Record<string, string>,

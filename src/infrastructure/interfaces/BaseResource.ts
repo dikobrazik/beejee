@@ -6,7 +6,7 @@ export type RequestOptions = RequestInit & { queryParams: Record<string, string>
 export interface BaseResource<Entity> {
   post<ResponsePayload = Entity>(
     endpoint: string,
-    body?: Entity,
+    body?: FormData,
     options?: RequestInit
   ): Promise<Response<ResponsePayload>['message']>;
   get<ResponsePayload = Entity>(
