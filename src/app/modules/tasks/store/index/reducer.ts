@@ -3,7 +3,7 @@ import { SortParams } from '../../domain/interfaces/sortParams';
 import { createTask, loadTasks, setPage, setSortParams } from './actions';
 import { tasksAdapter } from './adapter';
 
-const tasksIndexStore = createSlice({
+const tasksSlice = createSlice({
   name: 'tasks-index',
   initialState: tasksAdapter.getInitialState({
     loading: false,
@@ -47,7 +47,7 @@ const tasksIndexStore = createSlice({
   },
 });
 
-type tasksStore = ReturnType<typeof tasksIndexStore.reducer>;
-const tasksStore = tasksIndexStore.reducer;
+type tasksStore = ReturnType<typeof tasksSlice.reducer>;
+const tasksStore = tasksSlice.reducer;
 
 export default tasksStore;

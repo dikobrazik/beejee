@@ -1,22 +1,18 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import Navigator from './app/modules/navigation/routes';
-import { Container } from 'react-bootstrap';
-import store from './store';
 import { Notification } from './app/modules/common/ui/components/notify';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Navigator from './app/modules/navigation/routes';
+import reportWebVitals from './reportWebVitals';
+import store from './store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Container className="py-4">
-      <Provider store={store}>
-        <Navigator />
-      </Provider>
-      <Notification />
-    </Container>
+    <Provider store={store}>
+      <Navigator />
+    </Provider>
+    <Notification />
   </React.StrictMode>,
   document.getElementById('root')
 );

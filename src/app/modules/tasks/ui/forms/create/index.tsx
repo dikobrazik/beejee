@@ -1,3 +1,4 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import { useCallback } from 'react';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -25,7 +26,6 @@ const TasksCreateForm = (props: Props) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     setError,
   } = useForm({ defaultValues: task });
@@ -43,6 +43,7 @@ const TasksCreateForm = (props: Props) => {
 
   const onSubmit = useCallback<SubmitHandler<Task>>((task, event) => {
     dispatch(createTask(new FormData(event?.target)))
+      .then(unwrapResult)
       .then(() => {
         notify({ message: 'Task created', type: 'success' });
         props.onDone && props.onDone(task);
