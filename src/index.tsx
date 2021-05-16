@@ -3,13 +3,18 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import Navigator from './app/modules/navigation/routes';
+import { Container } from 'react-bootstrap';
 import store from './store';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Navigator />
-    </Provider>
+    <Container className="py-4">
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    </Container>
   </React.StrictMode>,
   document.getElementById('root')
 );
