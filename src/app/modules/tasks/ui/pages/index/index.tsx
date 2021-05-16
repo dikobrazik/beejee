@@ -2,10 +2,12 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../../../../store';
+import { isAuthorizedSelector } from '../../../../auth/store/index/selectors';
 import CommonList from '../../../../common/ui/components/list';
 import Loader from '../../../../common/ui/components/loader';
 import CommonPagination from '../../../../common/ui/components/paginator';
 import { SortParams } from '../../../domain/interfaces/sortParams';
+import { Task } from '../../../domain/interfaces/task';
 import { loadTasks } from '../../../store/index/actions';
 import {
   isLoadingSelector,
@@ -14,7 +16,7 @@ import {
   tasksSelector,
 } from '../../../store/index/selectors';
 import TaskCardComponent from '../../components/task-card';
-import TasksCreateForm from '../../forms/create';
+import TasksForm from '../../forms/index';
 
 const sorts = 'id,username,email,status'
   .split(',')
@@ -24,15 +26,15 @@ const sorts = 'id,username,email,status'
   );
 
 const TasksPagesIndex = () => {
-  const [isCreateModalShown, setIsCreateModalShown] = useState(false);
-  const handleShow = useCallback(() => setIsCreateModalShown(true), []);
-  const handleClose = useCallback(() => setIsCreateModalShown(false), []);
+  const [isTaskModalShown, setIsTaskModalShown] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task>();
 
   const dispatch = useDispatch<AppDispatch>();
   const tasks = useSelector(tasksSelector);
   const loading = useSelector(isLoadingSelector);
   const tasksCount = useSelector(tasksCountSelector);
   const tasksPage = useSelector(tasksPageSelector);
+  const isAuthorized = useSelector(isAuthorizedSelector);
 
   useEffect(() => {
     dispatch(loadTasks());
@@ -48,11 +50,21 @@ const TasksPagesIndex = () => {
     dispatch(loadTasks({ page }));
   }, []);
 
+  const onEditClick = useCallback((task: Task) => {
+    setSelectedTask(task);
+    setIsTaskModalShown(true);
+  }, []);
+
+  const onTaskModalDone = useCallback(() => {
+    setSelectedTask(undefined);
+    setIsTaskModalShown(false);
+  }, []);
+
   return (
     <>
       <Row className="mb-4">
         <Col md="auto">
-          <Button variant="primary" onClick={handleShow}>
+          <Button variant="primary" onClick={setIsTaskModalShown.bind(null, true)}>
             Добавить задачу
           </Button>
         </Col>
@@ -67,16 +79,19 @@ const TasksPagesIndex = () => {
       </Row>
       <Row>
         <Col>
-          <CommonList data={tasks} renderItem={TaskCardComponent}></CommonList>
+          <CommonList
+            data={tasks}
+            renderItem={(task) => <TaskCardComponent task={task} onEdit={isAuthorized ? onEditClick : undefined} />}
+          ></CommonList>
           <CommonPagination total={tasksCount} active={tasksPage} onChange={onPageChange} />
         </Col>
       </Row>
-      <Modal show={isCreateModalShown} onHide={handleClose}>
+      <Modal show={isTaskModalShown} onHide={setIsTaskModalShown.bind(null, false)}>
         <Modal.Header closeButton>
           <Modal.Title>Создание задачи</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <TasksCreateForm onDone={handleClose}></TasksCreateForm>
+          <TasksForm task={selectedTask} onDone={onTaskModalDone}></TasksForm>
         </Modal.Body>
       </Modal>
       <Loader visible={loading}></Loader>

@@ -8,7 +8,7 @@ import ErrorMessage from '../../../../common/ui/components/error-message';
 import Loader from '../../../../common/ui/components/loader';
 import notify from '../../../../common/ui/components/notify';
 import { Task } from '../../../domain/interfaces/task';
-import { createTask } from '../../../store/index/actions';
+import { createTask, updateTask } from '../../../store/index/actions';
 import { isLoadingSelector } from '../../../store/index/selectors';
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 const emailPattern =
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-const TasksCreateForm = (props: Props) => {
+const TasksForm = (props: Props) => {
   const { task } = props;
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector(isLoadingSelector);
@@ -42,10 +42,12 @@ const TasksCreateForm = (props: Props) => {
   }, []);
 
   const onSubmit = useCallback<SubmitHandler<Task>>((task, event) => {
-    dispatch(createTask(new FormData(event?.target)))
+    const payload = new FormData(event?.target);
+    const request = task.id ? updateTask(payload) : createTask(payload);
+    dispatch(request)
       .then(unwrapResult)
       .then(() => {
-        notify({ message: 'Task created', type: 'success' });
+        notify({ message: 'Success', type: 'success' });
         props.onDone && props.onDone(task);
       })
       .catch((errors: Record<keyof Task, string>) => handleServerErrors(errors));
@@ -91,4 +93,4 @@ const TasksCreateForm = (props: Props) => {
   );
 };
 
-export default TasksCreateForm;
+export default TasksForm;

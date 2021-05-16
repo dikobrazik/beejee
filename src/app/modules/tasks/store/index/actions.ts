@@ -24,6 +24,12 @@ export const createTask = createAsyncThunk<Task, FormData>(`${PREFIX}/createTask
   return createdTask;
 });
 
+export const updateTask = createAsyncThunk<Task, FormData>(`${PREFIX}/updateTask`, async (task, { dispatch }) => {
+  const createdTask = await tasksRepository.update(task as unknown as any);
+  dispatch(loadTasks());
+  return createdTask;
+});
+
 export const loadTasks = createAsyncThunk<TasksListResponse, LoadTasksOptions>(
   `${PREFIX}/loadTasks`,
   (params, { dispatch, getState }) => {

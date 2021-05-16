@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SortParams } from '../../domain/interfaces/sortParams';
-import { createTask, loadTasks, setPage, setSortParams } from './actions';
+import { createTask, loadTasks, setPage, setSortParams, updateTask } from './actions';
 import { tasksAdapter } from './adapter';
 
 const tasksSlice = createSlice({
@@ -42,6 +42,16 @@ const tasksSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(createTask.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateTask.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateTask.fulfilled, (state, { payload }) => {
+      tasksAdapter.upsertOne(state, payload);
+      state.loading = false;
+    });
+    builder.addCase(updateTask.rejected, (state) => {
       state.loading = false;
     });
   },

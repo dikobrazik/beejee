@@ -1,8 +1,14 @@
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card, Row, Col, Button } from 'react-bootstrap';
 import { Task } from '../../../domain/interfaces/task';
 import TaskStatusComponent from '../task-status';
 
-const TaskCardComponent = (task: Task) => {
+type Props = {
+  task: Task;
+  onEdit?: (task: Task) => void;
+};
+
+const TaskCardComponent = (props: Props) => {
+  const { task, onEdit } = props;
   return (
     <Card className="mb-4" key={task.id}>
       <Card.Body>
@@ -18,6 +24,13 @@ const TaskCardComponent = (task: Task) => {
         <Card.Subtitle className="mb-2 text-muted">{task.email}</Card.Subtitle>
         <Card.Text>{task.text}</Card.Text>
       </Card.Body>
+      {onEdit && (
+        <Card.Footer>
+          <Button variant="danger" onClick={onEdit?.bind(null, task)}>
+            Редактировать
+          </Button>
+        </Card.Footer>
+      )}
     </Card>
   );
 };
