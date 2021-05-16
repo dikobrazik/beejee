@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../../../../store';
 import ErrorMessage from '../../../../common/ui/components/error-message';
 import Loader from '../../../../common/ui/components/loader';
+import notify from '../../../../common/ui/components/notify';
 import { Task } from '../../../domain/interfaces/task';
 import { createTask } from '../../../store/index/actions';
 import { isLoadingSelector } from '../../../store/index/selectors';
@@ -29,14 +30,24 @@ const TasksCreateForm = (props: Props) => {
     setError,
   } = useForm({ defaultValues: task });
 
+  const handleServerErrors = useCallback((errors: Record<keyof Task, string>) => {
+    if (typeof errors === 'string') {
+      const message = errors;
+      notify({ message, type: 'danger' });
+    } else {
+      for (const [key, message] of Object.entries(errors)) {
+        setError(key as keyof Task, { type: 'validate', message });
+      }
+    }
+  }, []);
+
   const onSubmit = useCallback<SubmitHandler<Task>>((task, event) => {
     dispatch(createTask(new FormData(event?.target)))
       .then(() => {
+        notify({ message: 'Task created', type: 'success' });
         props.onDone && props.onDone(task);
       })
-      .catch((errors: Record<keyof Task, string>) => {
-        Object.entries(errors).forEach(([key, message]) => setError(key as keyof Task, { type: 'validate', message }));
-      });
+      .catch((errors: Record<keyof Task, string>) => handleServerErrors(errors));
   }, []);
   return (
     <Form onSubmit={handleSubmit(onSubmit, console.log)}>

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import Navigator from './app/modules/navigation/routes';
 import { Container } from 'react-bootstrap';
 import store from './store';
+import { Notification } from './app/modules/common/ui/components/notify';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
       <Provider store={store}>
         <Navigator />
       </Provider>
+      <Notification />
     </Container>
   </React.StrictMode>,
   document.getElementById('root')
