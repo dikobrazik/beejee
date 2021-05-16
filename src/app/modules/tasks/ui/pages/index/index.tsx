@@ -17,6 +17,7 @@ import {
 } from '../../../store/index/selectors';
 import TaskCardComponent from '../../components/task-card';
 import TasksForm from '../../forms/index';
+import useFilterInQueryParams from '../../hooks/use-filter-in-query-params';
 
 const sorts = 'id,username,email,status'
   .split(',')
@@ -28,6 +29,7 @@ const sorts = 'id,username,email,status'
 const TasksPagesIndex = () => {
   const [isTaskModalShown, setIsTaskModalShown] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task>();
+  const { sort } = useFilterInQueryParams();
 
   const dispatch = useDispatch<AppDispatch>();
   const tasks = useSelector(tasksSelector);
@@ -70,7 +72,7 @@ const TasksPagesIndex = () => {
         </Col>
         <Col></Col>
         <Col md="auto">
-          <Form.Control as="select" custom onChange={onSortChange}>
+          <Form.Control as="select" value={sort} custom onChange={onSortChange}>
             {sorts.map((sort) => (
               <option key={sort}>{sort}</option>
             ))}
